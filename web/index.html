@@ -31,7 +31,7 @@
     <script type="text/javascript">
       document.addEventListener('click', (e) => {
         const link = e.target.closest('a');
-        if (link && link.host !== window.location.host) {
+        if (link && link.hostname && link.hostname !== window.location.hostname) {
           window.umami?.track('outbound-link-click', { url: link.href });
         }
       });

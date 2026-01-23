@@ -58,6 +58,20 @@ function App() {
         <section id="projects" className="section">
           <h2>Featured Projects</h2>
           <div className="projects-grid">
+            
+            <div className="project-card glass-panel">
+              <div className="project-icon">∿</div>
+              <h3>Waveform</h3>
+              <p>Analog synthesizer visualization with Lissajous figures and hand & face tracking</p>
+              <div className="project-footer">
+                <span className="project-tech">Svelte • Web Audio API • MediaPipe</span>
+                <div className="project-links">
+                  <a href="https://waveform.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
+                  <a href="https://github.com/rjchicago/waveform" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
+                </div>
+              </div>
+            </div>
+            
             <div className="project-card glass-panel">
               <div className="project-icon">✨</div>
               <h3>PARTi</h3>
