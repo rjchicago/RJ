@@ -60,14 +60,51 @@ function App() {
           <div className="projects-grid">
             
             <div className="project-card glass-panel">
-              <div className="project-icon">∿</div>
-              <h3>Waveform</h3>
-              <p>Analog synthesizer visualization with Lissajous figures and hand & face tracking</p>
+              <div className="project-icon">🎶</div>
+              <h3>Overtone</h3>
+              <p>MP3 Player with Real-Time Audio Effects and Retro Visualizations</p>
               <div className="project-footer">
-                <span className="project-tech">Svelte • Web Audio API • MediaPipe</span>
+                <span className="project-tech">TypeScript • Svelte • Web Audio API</span>
                 <div className="project-links">
-                  <a href="https://waveform.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
-                  <a href="https://github.com/rjchicago/waveform" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
+                  <a href="https://music.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
+                  <a href="https://github.com/rjchicago/overtone" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
+                </div>
+              </div>
+            </div>
+            
+            <div className="project-card glass-panel">
+              <div className="project-icon">✄</div>
+              <h3>Snips</h3>
+              <p>Create, fork, and share HTML/CSS/JS snippets. Self-hosted with discovery, likes, and notifications.</p>
+              <div className="project-footer">
+                <span className="project-tech">TypeScript • React</span>
+                <div className="project-links">
+                  <a href="https://snips.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
+                  <a href="https://github.com/rjchicago/snips" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
+                </div>
+              </div>
+            </div>
+            
+            <div className="project-card glass-panel">
+              <div className="project-icon">🎮</div>
+              <h3>TermV</h3>
+              <p>High-performance, terminal-based Tetris game written in C with ncurses</p>
+              <div className="project-footer">
+                <span className="project-tech">C • ncurses • Terminal</span>
+                <div className="project-links">
+                  <a href="https://github.com/rjchicago/termv" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
+                </div>
+              </div>
+            </div>
+            
+            <div className="project-card glass-panel">
+              <div className="project-icon">🐳</div>
+              <h3>Rancher KF</h3>
+              <p>Kubernetes Fleet management and automation tools</p>
+              <div className="project-footer">
+                <span className="project-tech">Go • Kubernetes • Docker</span>
+                <div className="project-links">
+                  <a href="https://github.com/rjchicago/rancher-kf" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
                 </div>
               </div>
             </div>
@@ -84,31 +121,7 @@ function App() {
                 </div>
               </div>
             </div>
-            
-            <div className="project-card glass-panel">
-              <div className="project-icon">👾</div>
-              <h3>Cman</h3>
-              <p>Classic Pac-Man style arcade game with custom level editor</p>
-              <div className="project-footer">
-                <span className="project-tech">TypeScript • Python • Docker</span>
-                <div className="project-links">
-                  <a href="https://cman.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
-                  <a href="https://github.com/rjchicago/cman" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
-                </div>
-              </div>
-            </div>
-            
-            <div className="project-card glass-panel">
-              <div className="project-icon">🐳</div>
-              <h3>Rancher KF</h3>
-              <p>Kubernetes Fleet management and automation tools</p>
-              <div className="project-footer">
-                <span className="project-tech">Go • Kubernetes • Docker</span>
-                <div className="project-links">
-                  <a href="https://github.com/rjchicago/rancher-kf" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
-                </div>
-              </div>
-            </div>
+
           </div>
         </section>
 
