@@ -60,6 +60,18 @@ function App() {
           <div className="projects-grid">
             
             <div className="project-card glass-panel">
+              <div className="project-icon"><img src="/snipps.svg" alt="Snipps" width="24" height="24" /></div>
+              <h3>Snipps</h3>
+              <p>Like. Fork. Share.<br />HTML/CSS/JS snippets + social.</p>
+              <div className="project-footer">
+                <span className="project-tech">TypeScript • React</span>
+                <div className="project-links">
+                  <a href="https://snipps.dev/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
+                </div>
+              </div>
+            </div>
+            
+            <div className="project-card glass-panel">
               <div className="project-icon">🎶</div>
               <h3>Overtone</h3>
               <p>MP3 Player with Real-Time Audio Effects and Retro Visualizations</p>
@@ -68,19 +80,6 @@ function App() {
                 <div className="project-links">
                   <a href="https://music.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
                   <a href="https://github.com/rjchicago/overtone" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
-                </div>
-              </div>
-            </div>
-            
-            <div className="project-card glass-panel">
-              <div className="project-icon">✄</div>
-              <h3>Snips</h3>
-              <p>Create, fork, and share HTML/CSS/JS snippets. Self-hosted with discovery, likes, and notifications.</p>
-              <div className="project-footer">
-                <span className="project-tech">TypeScript • React</span>
-                <div className="project-links">
-                  <a href="https://snips.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
-                  <a href="https://github.com/rjchicago/snips" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
                 </div>
               </div>
             </div>
