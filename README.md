@@ -27,6 +27,8 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 ### Docker Compose
 
+Runs the Vite dev server with hot reload on source changes:
+
 ```bash
 docker-compose up
 ```

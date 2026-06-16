@@ -1,11 +1,12 @@
 services:
   rj:
-    image: rjchicago/rj:latest
+    image: rjchicago/rj:dev
     build:
       context: .
       dockerfile: Dockerfile
+      target: dev
     ports:
-      - "3000:80"
+      - "5173:5173"
     volumes:
       - ./web:/app
       - /app/node_modules
