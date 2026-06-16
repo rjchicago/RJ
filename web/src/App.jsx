@@ -117,12 +117,17 @@ function App() {
         </nav>
 
         <section id="about" className="section glass-panel">
-          <h2>About Me</h2>
-          <p>
+          <div className="about-layout">
+            <img className="profile-photo" src="/profile.png" alt="Ryan Jones" />
+            <div>
+              <h2>About Me</h2>
+              <p>
 I have over 25 years of experience in technology leadership and currently serve as a Director of Software Engineering, 
 leading teams responsible for large-scale cloud and Kubernetes platforms. I have extensive experience evaluating, implementing, 
 and integrating Artificial Intelligence into business processes, software applications, engineering workflows, and everyday life.
-          </p>
+              </p>
+            </div>
+          </div>
         </section>
 
         <section id="courses" className="section">
