@@ -36,7 +36,7 @@ function App() {
               onTouchEnd={() => setTitleHover(false)}
             />
           </h1>
-          <p className="subtitle">Software Engineer • Cloud Architect • Creator</p>
+          <p className="subtitle">Software Engineer • Cloud Architect • Educator</p>
           <div className="tagline">Building the future, one commit at a time</div>
         </header>
 
@@ -95,31 +95,6 @@ function App() {
                 </div>
               </div>
             </div>
-            
-            <div className="project-card glass-panel">
-              <div className="project-icon">🐳</div>
-              <h3>Rancher KF</h3>
-              <p>Kubernetes Fleet management and automation tools</p>
-              <div className="project-footer">
-                <span className="project-tech">Go • Kubernetes • Docker</span>
-                <div className="project-links">
-                  <a href="https://github.com/rjchicago/rancher-kf" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
-                </div>
-              </div>
-            </div>
-            
-            <div className="project-card glass-panel">
-              <div className="project-icon">✨</div>
-              <h3>PARTi</h3>
-              <p>Real-time particle simulator with face and hand tracking using MediaPipe</p>
-              <div className="project-footer">
-                <span className="project-tech">JavaScript • MediaPipe • Canvas</span>
-                <div className="project-links">
-                  <a href="https://parti.rjchicago.com/" target="_blank" rel="noopener noreferrer" className="project-link">🌐 Web</a>
-                  <a href="https://github.com/rjchicago/parti" target="_blank" rel="noopener noreferrer" className="project-link"><FaGithub /> GitHub</a>
-                </div>
-              </div>
-            </div>
 
           </div>
         </section>
@@ -132,9 +107,6 @@ function App() {
             </a>
             <a href="https://linkedin.com/in/rjchicago" target="_blank" rel="noopener noreferrer" className="contact-link">
               <FaLinkedin className="contact-icon" /> LinkedIn
-            </a>
-            <a href="https://x.com/rjchicago" target="_blank" rel="noopener noreferrer" className="contact-link">
-              <FaXTwitter className="contact-icon" /> X
             </a>
           </div>
         </section>
