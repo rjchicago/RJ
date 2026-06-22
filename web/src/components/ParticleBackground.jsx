@@ -1,5 +1,11 @@
 import { useEffect, useRef } from 'react';
 
+const PARTICLE_COLORS = [
+  '#00f5ff', '#00d4e6', '#0099cc', '#0077b3',
+  '#00557a', '#40e0d0', '#48d1cc', '#20b2aa',
+  '#5f9ea0', '#7fcdcd', '#00ced1', '#008b8b'
+];
+
 const ParticleBackground = ({ particleCount = 500, titleHover = false, getTitleBounds }) => {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
@@ -30,13 +36,6 @@ const ParticleBackground = ({ particleCount = 500, titleHover = false, getTitleB
     getTitleBoundsRef.current = getTitleBounds;
   }, [getTitleBounds]);
 
-  // Ocean theme colors
-  const colors = [
-    '#00f5ff', '#00d4e6', '#0099cc', '#0077b3',
-    '#00557a', '#40e0d0', '#48d1cc', '#20b2aa',
-    '#5f9ea0', '#7fcdcd', '#00ced1', '#008b8b'
-  ];
-
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -59,7 +58,7 @@ const ParticleBackground = ({ particleCount = 500, titleHover = false, getTitleB
           vx: (Math.random() - 0.5) * 0.5,
           vy: (Math.random() - 0.5) * 0.5,
           size: Math.random() * 1 + 0.2,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)],
           alpha: 0.4 + Math.random() * 0.6,
           baseAlpha: 0.4 + Math.random() * 0.6
         });
@@ -69,8 +68,6 @@ const ParticleBackground = ({ particleCount = 500, titleHover = false, getTitleB
     initParticles();
 
     // Physics settings
-    const repelStrength = 0.025;
-    const repelRadius = 350;
     const attractStrength = 0.04;
     const maxSpeed = 25;
     const friction = 0.97;
