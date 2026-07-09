@@ -28,7 +28,7 @@ const courses = [
     Icon: ShieldPlus,
     summary: 'A friendly introduction to using AI for writing, planning, hobbies, travel, and everyday tasks.',
     audience: 'Adults 55+',
-    format: 'Single 90-minute workshop',
+    format: 'Single 120-minute workshop',
     description: 'A hands-on, question-friendly workshop for adults 55+ who want to understand AI and use it safely and confidently. No technical experience is required.',
     learn: [
       'Explain AI assistants in plain language',
@@ -284,7 +284,7 @@ function AiPage() {
         <div className="section-heading narrow-heading">
           <p className="eyebrow">Courses & workshops</p>
           <h2>Programs ready for community partners</h2>
-          <p>Beginner-friendly instruction built around hands-on examples, discussion, and repeatable skills. Each session can include optional office hours for individual questions and setup help.</p>
+          <p>Beginner-friendly instruction built around hands-on examples, discussion, and repeatable skills. Each session can include an optional 30-minute Q&A following the core program.</p>
         </div>
         <div className="card-grid">
           {courses.map((course) => {
@@ -348,7 +348,7 @@ function CourseModal({ course, onClose }) {
         <span className="status-chip">Available for proposals</span>
         <h2 id={`${course.id}-title`}>{course.title}</h2>
         <p>{course.description}</p>
-        <div className="course-meta"><span>{course.format}</span><span>{course.audience}</span><span>Optional 30-minute office hours</span></div>
+        <div className="course-meta"><span>{course.format}</span><span>{course.audience}</span><span>Optional 30-minute Q&A following</span></div>
         <div className="course-modal-grid">
           <div><h3>Learning Objectives</h3><ul>{course.learn.map((item) => <li key={item}>{item}</li>)}</ul></div>
           <div><h3>{course.outlineLabel}</h3><ol>{course.sessions.map((item) => <li key={item}>{item}</li>)}</ol></div>
