@@ -3,7 +3,6 @@ import { NavLink, Link, Route, Routes, useLocation } from 'react-router-dom';
 import { FaGithub, FaLinkedin } from 'react-icons/fa6';
 import {
   ArrowRight,
-  AtSign,
   Bot,
   BrainCircuit,
   CalendarDays,
@@ -13,6 +12,7 @@ import {
   Library,
   MessagesSquare,
   Music,
+  Send,
   ShieldCheck,
   ShieldPlus,
   Users,
@@ -121,6 +121,16 @@ const projects = [
   },
 ];
 
+const inquiryOptions = [
+  'AI workshop',
+  'Multi-session course',
+  'Speaking engagement',
+  'Technology consulting',
+  'General inquiry',
+];
+
+const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+
 function App() {
   const [titleHover, setTitleHover] = useState(false);
   const titleRef = useRef(null);
@@ -139,6 +149,7 @@ function App() {
             <Route path="/ai" element={<AiPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
@@ -164,6 +175,10 @@ const routeMetadata = {
   '/projects': {
     title: 'Projects | Ryan Jones',
     description: 'Independent software projects by Ryan Jones, including Snipps, Overtone, and TermV.',
+  },
+  '/contact': {
+    title: 'Contact Ryan Jones | RJChicago, LLC',
+    description: 'Contact Ryan Jones about AI workshops, speaking, education, and technology opportunities.',
   },
 };
 
@@ -193,7 +208,7 @@ function SiteHeader() {
         <NavLink to="/about">About</NavLink>
         <NavLink to="/projects">Projects</NavLink>
       </nav>
-      <a className="header-contact" href="mailto:rjchicago.llc@gmail.com">Contact</a>
+      <Link className="header-contact" to="/contact">Contact</Link>
     </header>
   );
 }
@@ -262,7 +277,7 @@ function AiPage() {
         title="Practical AI for real life"
         copy="Approachable talks, workshops, and courses that help community audiences understand AI, use it effectively, and make informed decisions about its risks."
       >
-        <a className="button button-primary" href="mailto:rjchicago.llc@gmail.com?subject=AI%20program%20inquiry">Discuss a program <ArrowRight /></a>
+        <Link className="button button-primary" to="/contact?type=AI%20workshop&source=AI%20program%20hero">Discuss a program <ArrowRight /></Link>
       </PageHero>
 
       <section className="section">
@@ -353,7 +368,7 @@ function CourseModal({ course, onClose }) {
           <div><h3>Learning Objectives</h3><ul>{course.learn.map((item) => <li key={item}>{item}</li>)}</ul></div>
           <div><h3>{course.outlineLabel}</h3><ol>{course.sessions.map((item) => <li key={item}>{item}</li>)}</ol></div>
         </div>
-        <a className="text-link modal-inquiry" href={`mailto:rjchicago.llc@gmail.com?subject=${encodeURIComponent(`${course.title} inquiry`)}`}>Ask about this program <ArrowRight /></a>
+        <Link className="text-link modal-inquiry" to={`/contact?type=Multi-session%20course&source=${encodeURIComponent(course.title)}`}>Ask about this program <ArrowRight /></Link>
       </section>
     </div>
   );
@@ -406,6 +421,184 @@ function ProjectsPage() {
   );
 }
 
+function ContactPage() {
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const inquiryType = params.get('type') || 'General inquiry';
+  const source = params.get('source') || 'Contact page';
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Contact"
+        title="Start a conversation"
+        copy="Share a few details about the audience, timing, and goal. I’ll reply directly."
+      />
+      <section className="section contact-section glass-panel">
+        <div className="contact-intro">
+          <p className="eyebrow">Details help</p>
+          <h2>Tell me what you’re planning</h2>
+          <p>For workshops or speaking inquiries, include the audience, preferred format, location, timing, and any goals or concerns you already know.</p>
+        </div>
+        <ContactForm defaultInquiryType={inquiryType} source={source} />
+      </section>
+    </>
+  );
+}
+
+function ContactForm({ defaultInquiryType, source }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    organization: '',
+    inquiryType: defaultInquiryType,
+    timeframe: '',
+    audience: '',
+    message: '',
+    website: '',
+  });
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [status, setStatus] = useState({ type: 'idle', message: '' });
+  const turnstileContainerRef = useRef(null);
+  const turnstileWidgetRef = useRef(null);
+
+  useEffect(() => {
+    setFormData((current) => ({ ...current, inquiryType: defaultInquiryType }));
+  }, [defaultInquiryType]);
+
+  useEffect(() => {
+    if (!turnstileSiteKey) return undefined;
+
+    let cancelled = false;
+
+    const renderTurnstile = () => {
+      if (cancelled || !window.turnstile || !turnstileContainerRef.current || turnstileWidgetRef.current) return;
+      turnstileWidgetRef.current = window.turnstile.render(turnstileContainerRef.current, {
+        sitekey: turnstileSiteKey,
+        callback: (token) => setCaptchaToken(token),
+        'expired-callback': () => setCaptchaToken(''),
+        'error-callback': () => setCaptchaToken(''),
+      });
+    };
+
+    const existingScript = document.querySelector('script[src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"]');
+    if (existingScript) {
+      renderTurnstile();
+    } else {
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      script.addEventListener('load', renderTurnstile);
+      document.head.appendChild(script);
+    }
+
+    const renderTimer = window.setInterval(renderTurnstile, 300);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(renderTimer);
+      if (window.turnstile && turnstileWidgetRef.current) {
+        window.turnstile.remove(turnstileWidgetRef.current);
+        turnstileWidgetRef.current = null;
+      }
+    };
+  }, []);
+
+  const updateField = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus({ type: 'submitting', message: 'Sending your message...' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, source, captchaToken }),
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Unable to send your message right now.');
+      }
+
+      setStatus({ type: 'success', message: 'Message sent. I’ll reply directly.' });
+      setFormData({
+        name: '',
+        email: '',
+        organization: '',
+        inquiryType: defaultInquiryType,
+        timeframe: '',
+        audience: '',
+        message: '',
+        website: '',
+      });
+      setCaptchaToken('');
+      if (window.turnstile && turnstileWidgetRef.current) {
+        window.turnstile.reset(turnstileWidgetRef.current);
+      }
+    } catch (error) {
+      setStatus({ type: 'error', message: error.message });
+    }
+  };
+
+  const submitDisabled = status.type === 'submitting' || (turnstileSiteKey && !captchaToken);
+
+  return (
+    <form className="contact-form" onSubmit={handleSubmit}>
+      <div className="form-grid">
+        <label>
+          <span>Name</span>
+          <input name="name" value={formData.name} onChange={updateField} autoComplete="name" required maxLength="120" />
+        </label>
+        <label>
+          <span>Email</span>
+          <input name="email" type="email" value={formData.email} onChange={updateField} autoComplete="email" required maxLength="180" />
+        </label>
+      </div>
+      <label>
+        <span>Organization</span>
+        <input name="organization" value={formData.organization} onChange={updateField} autoComplete="organization" maxLength="160" />
+      </label>
+      <div className="form-grid">
+        <label>
+          <span>Inquiry type</span>
+          <select name="inquiryType" value={formData.inquiryType} onChange={updateField}>
+            {inquiryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>Timeframe</span>
+          <input name="timeframe" value={formData.timeframe} onChange={updateField} placeholder="Spring 2027, flexible, etc." maxLength="120" />
+        </label>
+      </div>
+      <label>
+        <span>Audience</span>
+        <input name="audience" value={formData.audience} onChange={updateField} placeholder="General, adults 55+, parents, team, etc." maxLength="120" />
+      </label>
+      <label>
+        <span>Message</span>
+        <textarea name="message" value={formData.message} onChange={updateField} rows="7" required minLength="20" maxLength="3000" />
+      </label>
+      <label className="form-honeypot" aria-hidden="true">
+        <span>Website</span>
+        <input name="website" value={formData.website} onChange={updateField} tabIndex="-1" autoComplete="off" />
+      </label>
+      {turnstileSiteKey && <div className="captcha-slot" ref={turnstileContainerRef} />}
+      <div className="form-actions">
+        <button className="button button-primary" type="submit" disabled={submitDisabled}>
+          <Send /> {status.type === 'submitting' ? 'Sending...' : 'Send message'}
+        </button>
+        {status.message && <p className={`form-status form-status-${status.type}`}>{status.message}</p>}
+      </div>
+    </form>
+  );
+}
+
 function PageHero({ eyebrow, title, copy, children }) {
   return <section className="page-hero"><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{copy}</p>{children && <div className="button-row">{children}</div>}</section>;
 }
@@ -414,7 +607,7 @@ function ContactCta({ title, copy }) {
   return (
     <section className="section contact-cta glass-panel">
       <div><p className="eyebrow">Let’s connect</p><h2>{title}</h2><p>{copy}</p></div>
-      <a className="button button-primary" href="mailto:rjchicago.llc@gmail.com"><AtSign /> Email Ryan</a>
+      <Link className="button button-primary" to="/contact"><Send /> Contact Ryan</Link>
     </section>
   );
 }
@@ -428,7 +621,7 @@ function SiteFooter() {
     <footer className="site-footer">
       <div><Link className="brand" to="/">RJ</Link><p>Technology leadership and practical AI education.</p></div>
       <div className="social-links">
-        <a href="mailto:rjchicago.llc@gmail.com" aria-label="Email"><AtSign /></a>
+        <Link to="/contact" aria-label="Contact"><Send /></Link>
         <a href="https://github.com/rjchicago" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>
         <a href="https://linkedin.com/in/rjchicago" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin /></a>
       </div>

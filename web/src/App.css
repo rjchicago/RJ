@@ -515,6 +515,108 @@ p {
   margin-bottom: 0;
 }
 
+.contact-section {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.contact-intro {
+  position: sticky;
+  top: 7rem;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.contact-form label span {
+  color: var(--cyan);
+  font-size: 0.83rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(9, 10, 15, 0.52);
+  color: var(--text);
+  padding: 0.85rem 0.95rem;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.contact-form select {
+  appearance: none;
+}
+
+.contact-form textarea {
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: rgba(67, 231, 237, 0.72);
+  box-shadow: 0 0 0 3px rgba(67, 231, 237, 0.12);
+}
+
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.captcha-slot {
+  min-height: 65px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+  transform: none;
+}
+
+.form-status {
+  margin: 0;
+  font-size: 0.98rem !important;
+}
+
+.form-status-success {
+  color: var(--cyan) !important;
+}
+
+.form-status-error {
+  color: #ff9ca8 !important;
+}
+
 .bio-layout {
   display: grid;
   grid-template-columns: 240px 1fr;
@@ -797,11 +899,20 @@ p {
 
   .split-feature,
   .audience-section,
+  .contact-section,
   .bio-layout,
   .topic-grid,
   .course-modal-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+
+  .contact-intro {
+    position: static;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
   }
 
   .stat-grid {
