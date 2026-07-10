@@ -10,8 +10,6 @@ CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 # Build stage
 FROM node:22-alpine AS build
 WORKDIR /app
-ARG VITE_TURNSTILE_SITE_KEY
-ENV VITE_TURNSTILE_SITE_KEY=$VITE_TURNSTILE_SITE_KEY
 COPY web/package*.json ./
 RUN npm install
 COPY web/ .

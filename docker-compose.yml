@@ -12,7 +12,6 @@ services:
       - /app/node_modules
     environment:
       - VITE_API_PROXY_TARGET=http://api:3001
-      - VITE_TURNSTILE_SITE_KEY=${VITE_TURNSTILE_SITE_KEY}
     depends_on:
       - api
     restart: unless-stopped

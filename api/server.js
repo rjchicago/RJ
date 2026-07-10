@@ -19,6 +19,11 @@ const jsonResponse = (response, status, payload) => {
   response.end(JSON.stringify(payload));
 };
 
+const handleConfig = (response) => jsonResponse(response, 200, {
+  turnstileSiteKey: process.env.TURNSTILE_SITE_KEY || process.env.VITE_TURNSTILE_SITE_KEY || '',
+  turnstileRequired: Boolean(process.env.TURNSTILE_SECRET_KEY),
+});
+
 const readRequestBody = (request) => new Promise((resolve, reject) => {
   let body = '';
 
@@ -229,6 +234,10 @@ const server = http.createServer(async (request, response) => {
 
   if (request.method === 'GET' && url.pathname === '/health') {
     return jsonResponse(response, 200, { ok: true });
+  }
+
+  if (request.method === 'GET' && url.pathname === '/api/config') {
+    return handleConfig(response);
   }
 
   if (request.method === 'POST' && url.pathname === '/api/contact') {

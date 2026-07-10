@@ -129,8 +129,6 @@ const inquiryOptions = [
   'General inquiry',
 ];
 
-const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-
 function App() {
   const [titleHover, setTitleHover] = useState(false);
   const titleRef = useRef(null);
@@ -458,16 +456,50 @@ function ContactForm({ defaultInquiryType, source }) {
     website: '',
   });
   const [captchaToken, setCaptchaToken] = useState('');
+  const [contactConfig, setContactConfig] = useState({
+    loaded: false,
+    turnstileRequired: false,
+    turnstileSiteKey: '',
+  });
   const [status, setStatus] = useState({ type: 'idle', message: '' });
   const turnstileContainerRef = useRef(null);
   const turnstileWidgetRef = useRef(null);
+  const turnstileSiteKey = contactConfig.turnstileSiteKey;
 
   useEffect(() => {
     setFormData((current) => ({ ...current, inquiryType: defaultInquiryType }));
   }, [defaultInquiryType]);
 
   useEffect(() => {
-    if (!turnstileSiteKey) return undefined;
+    let cancelled = false;
+
+    const loadConfig = async () => {
+      try {
+        const response = await fetch('/api/config');
+        const config = await response.json();
+        if (!cancelled) {
+          setContactConfig({
+            loaded: true,
+            turnstileRequired: Boolean(config.turnstileRequired),
+            turnstileSiteKey: config.turnstileSiteKey || '',
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setContactConfig({ loaded: true, turnstileRequired: false, turnstileSiteKey: '' });
+        }
+      }
+    };
+
+    loadConfig();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!contactConfig.loaded || !turnstileSiteKey) return undefined;
 
     let cancelled = false;
 
@@ -503,7 +535,7 @@ function ContactForm({ defaultInquiryType, source }) {
         turnstileWidgetRef.current = null;
       }
     };
-  }, []);
+  }, [contactConfig.loaded, turnstileSiteKey]);
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -546,7 +578,8 @@ function ContactForm({ defaultInquiryType, source }) {
     }
   };
 
-  const submitDisabled = status.type === 'submitting' || (turnstileSiteKey && !captchaToken);
+  const captchaUnavailable = contactConfig.loaded && contactConfig.turnstileRequired && !turnstileSiteKey;
+  const submitDisabled = status.type === 'submitting' || !contactConfig.loaded || captchaUnavailable || (turnstileSiteKey && !captchaToken);
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
@@ -589,6 +622,7 @@ function ContactForm({ defaultInquiryType, source }) {
         <input name="website" value={formData.website} onChange={updateField} tabIndex="-1" autoComplete="off" />
       </label>
       {turnstileSiteKey && <div className="captcha-slot" ref={turnstileContainerRef} />}
+      {captchaUnavailable && <p className="form-status form-status-error">Contact form verification is not configured.</p>}
       <div className="form-actions">
         <button className="button button-primary" type="submit" disabled={submitDisabled}>
           <Send /> {status.type === 'submitting' ? 'Sending...' : 'Send message'}
