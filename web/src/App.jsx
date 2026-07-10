@@ -507,9 +507,21 @@ function ContactForm({ defaultInquiryType, source }) {
       if (cancelled || !window.turnstile || !turnstileContainerRef.current || turnstileWidgetRef.current) return;
       turnstileWidgetRef.current = window.turnstile.render(turnstileContainerRef.current, {
         sitekey: turnstileSiteKey,
-        callback: (token) => setCaptchaToken(token),
-        'expired-callback': () => setCaptchaToken(''),
-        'error-callback': () => setCaptchaToken(''),
+        callback: (token) => {
+          setCaptchaToken(token);
+          setStatus((current) => current.type === 'captcha-error' ? { type: 'idle', message: '' } : current);
+        },
+        'expired-callback': () => {
+          setCaptchaToken('');
+          setStatus({ type: 'captcha-error', message: 'Verification expired. Please try again.' });
+        },
+        'error-callback': () => {
+          setCaptchaToken('');
+          setStatus({ type: 'captcha-error', message: 'Verification failed. Please disable privacy or ad-blocking extensions for this page, try another browser, or use the LinkedIn link in the footer.' });
+          if (window.turnstile && turnstileWidgetRef.current) {
+            window.turnstile.reset(turnstileWidgetRef.current);
+          }
+        },
       });
     };
 
