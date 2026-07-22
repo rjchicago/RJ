@@ -84,12 +84,16 @@ Optional:
 
 ### Resend Setup
 
+https://resend.com/
+
 1. Create a Resend API key.
 2. Verify the sending domain or sender address in Resend.
 3. Set `RESEND_FROM_EMAIL` to the verified sender.
 4. Keep visitor email addresses in `reply_to`; do not send mail `from` the visitor's address.
 
 ### Turnstile Setup
+
+https://dash.cloudflare.com/837e256792c8c0de47f155d33733d42b/turnstile
 
 1. Create a Cloudflare Turnstile widget.
 2. Use Managed mode.

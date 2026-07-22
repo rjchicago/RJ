@@ -637,6 +637,63 @@ p {
   margin-top: 1rem;
 }
 
+.skyrise-section {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.skyrise-icon {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border: 1px solid rgba(67, 231, 237, 0.22);
+  border-radius: 14px;
+  background: rgba(67, 231, 237, 0.07);
+  color: var(--cyan);
+}
+
+.skyrise-icon svg {
+  width: 2rem;
+  height: 2rem;
+  stroke-width: 1.6;
+}
+
+.skyrise-copy h2 {
+  margin-bottom: 0.75rem;
+}
+
+.skyrise-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+
+.skyrise-details span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.skyrise-details svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--cyan);
+}
+
+.skyrise-button {
+  white-space: nowrap;
+}
+
 .project-page-section {
   padding-top: 0;
 }
@@ -921,6 +978,16 @@ p {
 
   .bio-layout {
     justify-items: start;
+  }
+
+  .skyrise-section {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .skyrise-button {
+    width: 100%;
+    white-space: normal;
   }
 
   .profile-photo {

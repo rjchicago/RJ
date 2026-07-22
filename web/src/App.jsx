@@ -6,7 +6,9 @@ import {
   Bot,
   BrainCircuit,
   CalendarDays,
+  ExternalLink,
   Gamepad2,
+  HeartHandshake,
   HouseHeart,
   Info,
   Library,
@@ -28,7 +30,7 @@ const courses = [
     Icon: ShieldPlus,
     summary: 'A friendly introduction to using AI for writing, planning, hobbies, travel, and everyday tasks.',
     audience: 'Adults 55+',
-    format: 'Single 120-minute workshop',
+    format: '120-minute workshop (includes 30-minute Q&A)',
     description: 'A hands-on, question-friendly workshop for adults 55+ who want to understand AI and use it safely and confidently. No technical experience is required.',
     learn: [
       'Explain AI assistants in plain language',
@@ -385,6 +387,26 @@ function AboutPage() {
           <p>Throughout his career, Ryan has taught and mentored others through technical training, leadership development, youth sports coaching, and community involvement. He specializes in making complex technology approachable and practical and believes AI literacy is becoming an essential life skill.</p>
           <p>His teaching focuses on helping people use AI safely, responsibly, and confidently.</p>
         </div>
+      </section>
+      <section className="section skyrise-section glass-panel" aria-labelledby="skyrise-heading">
+        <div className="skyrise-icon" aria-hidden="true">
+          <HeartHandshake />
+        </div>
+        <div className="skyrise-copy">
+          <p className="eyebrow">SkyRise Chicago 2026</p>
+          <h2 id="skyrise-heading">Climbing for Shirley Ryan AbilityLab</h2>
+          <p>
+            Ryan is participating in SkyRise Chicago on Sunday, November 8, 2026,
+            climbing the Willis Tower to help raise funds for Shirley Ryan AbilityLab.
+          </p>
+          <div className="skyrise-details" aria-label="SkyRise Chicago event details">
+            <span><CalendarDays /> November 8, 2026</span>
+            <span><ShieldCheck /> 105 flights / 2,149 stairs</span>
+          </div>
+        </div>
+        <a className="button button-primary skyrise-button" href="https://skyrisechicago.org/participants/rjchicago" target="_blank" rel="noreferrer">
+          Support the Fundraiser <ExternalLink />
+        </a>
       </section>
       <ContactCta title="Interested in working together?" copy="Get in touch about speaking, education, or technology opportunities." />
     </>
