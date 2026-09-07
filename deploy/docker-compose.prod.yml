@@ -1,0 +1,61 @@
+services:
+  rj-web:
+    image: 524541702023.dkr.ecr.us-east-1.amazonaws.com/rj/web:${RJ_IMAGE_TAG:?set RJ_IMAGE_TAG to a full Git SHA}
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: traefik
+      traefik.http.routers.rj-web.rule: Host(`rjchicago.com`)
+      traefik.http.routers.rj-web.entrypoints: websecure
+      traefik.http.routers.rj-web.tls: "true"
+      traefik.http.routers.rj-web.tls.certresolver: acme
+      traefik.http.routers.rj-web.service: rj-web-service
+      traefik.http.services.rj-web-service.loadbalancer.server.port: "80"
+    networks:
+      - traefik
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/healthz | grep -qx ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+  rj-api:
+    image: 524541702023.dkr.ecr.us-east-1.amazonaws.com/rj/api:${RJ_IMAGE_TAG:?set RJ_IMAGE_TAG to a full Git SHA}
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      TRUST_PROXY: "true"
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      CONTACT_TO_EMAIL: ${CONTACT_TO_EMAIL:-rjchicago.llc@gmail.com}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-RJChicago <onboarding@resend.dev>}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-}
+      TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY:-}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: traefik
+      traefik.http.routers.rj-api.rule: Host(`rjchicago.com`) && PathPrefix(`/api`)
+      traefik.http.routers.rj-api.priority: "100"
+      traefik.http.routers.rj-api.entrypoints: websecure
+      traefik.http.routers.rj-api.tls: "true"
+      traefik.http.routers.rj-api.tls.certresolver: acme
+      traefik.http.routers.rj-api.service: rj-api-service
+      traefik.http.services.rj-api-service.loadbalancer.server.port: "3001"
+    networks:
+      - traefik
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(async (r) => { if (!r.ok || !(await r.json()).ok) process.exit(1) }).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+networks:
+  traefik:
+    external: true

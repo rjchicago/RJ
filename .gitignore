@@ -22,9 +22,8 @@ ehthumbs.db
 *.log
 logs/
 
-# Dependencies (if added later)
+# Dependencies
 node_modules/
-package-lock.json
 
 # Build outputs
 dist/

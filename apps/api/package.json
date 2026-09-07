@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --env-file=../.env server.js",
-    "lint": "node --check server.js"
+    "dev": "node --watch --env-file=../../.env server.js",
+    "lint": "node --check server.js && node --check contact.js",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=22"
