@@ -1,0 +1,17 @@
+.aws
+.codex
+.env
+.env.*
+!.env.example
+.git
+.github
+node_modules
+**/node_modules
+dist
+**/dist
+build
+**/build
+.cache
+*.log
+.DS_Store
+plans
