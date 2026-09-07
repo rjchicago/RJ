@@ -21,6 +21,7 @@ import {
   X,
 } from 'lucide-react';
 import ParticleBackground from './components/ParticleBackground';
+import { UpcomingEvents } from './components/UpcomingEvents';
 import './App.css';
 
 const courses = [
@@ -147,6 +148,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage titleRef={titleRef} setTitleHover={setTitleHover} />} />
             <Route path="/ai" element={<AiPage />} />
+            <Route path="/events" element={<EventsPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -168,6 +170,10 @@ const routeMetadata = {
     title: 'AI Speaking & Education | Ryan Jones',
     description: 'Approachable AI talks, workshops, and courses for adults, parents, libraries, and community organizations.',
   },
+  '/events': {
+    title: 'Events | Ryan Jones',
+    description: 'Upcoming community AI talks, workshops, and courses from Ryan Jones of RJChicago, LLC.',
+  },
   '/about': {
     title: 'About Ryan Jones | RJChicago, LLC',
     description: 'Meet Ryan Jones, a technology leader and educator with more than 25 years of experience.',
@@ -183,17 +189,32 @@ const routeMetadata = {
 };
 
 function RouteEffects() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     const metadata = routeMetadata[pathname] ?? {
       title: 'Page Not Found | Ryan Jones',
       description: 'Ryan Jones — technology leader and AI educator.',
     };
     document.title = metadata.title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', metadata.description);
-  }, [pathname]);
+    let descriptionElement = document.querySelector('meta[name="description"]');
+    if (!descriptionElement) {
+      descriptionElement = document.createElement('meta');
+      descriptionElement.setAttribute('name', 'description');
+      document.head.appendChild(descriptionElement);
+    }
+    descriptionElement.setAttribute('content', metadata.description);
+
+    if (!hash) {
+      window.scrollTo(0, 0);
+      return undefined;
+    }
+
+    const scheduleFrame = window.requestAnimationFrame ?? ((callback) => window.setTimeout(callback, 0));
+    const cancelFrame = window.cancelAnimationFrame ?? window.clearTimeout;
+    const frame = scheduleFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' }));
+    return () => cancelFrame(frame);
+  }, [pathname, hash]);
 
   return null;
 }
@@ -205,6 +226,7 @@ function SiteHeader() {
       <nav className="nav-links" aria-label="Main navigation">
         <NavLink to="/" end>Home</NavLink>
         <NavLink to="/ai">AI Speaking & Education</NavLink>
+        <NavLink to="/events">Events</NavLink>
         <NavLink to="/about">About</NavLink>
         <NavLink to="/projects">Projects</NavLink>
       </nav>
@@ -292,7 +314,7 @@ function AiPage() {
           <TopicCard icon={HouseHeart} title="Families, School & AI" copy="Homework, digital literacy, academic integrity, family guidelines, and preparing children for an AI-enabled world." />
           <TopicCard icon={ShieldCheck} title="Safety, Scams & Misinformation" copy="Privacy, hallucinations, deepfakes, verification habits, and recognizing AI-enabled scams." />
         </div>
-        <p className="availability-note"><CalendarDays /> New speaking sessions are currently being developed for local community venues.</p>
+        <p className="availability-note"><CalendarDays /> <Link to="/events#upcoming">Winter 2027 community programs are now scheduled in Park Ridge.</Link></p>
       </section>
 
       <section className="section" id="programs">
@@ -336,6 +358,21 @@ function AiPage() {
 
       <ContactCta title="Bring practical AI education to your community" copy="Tell me about your audience, format, and goals. I’ll help shape the right session." />
       {activeCourse && <CourseModal course={activeCourse} onClose={() => setActiveCourseId(null)} />}
+    </>
+  );
+}
+
+function EventsPage() {
+  return (
+    <>
+      <PageHero
+        compact
+        eyebrow="Events"
+        title="AI education in the community"
+        copy="Upcoming talks, workshops, and courses designed to make artificial intelligence practical, approachable, and useful."
+      />
+      <UpcomingEvents />
+      <ContactCta title="Planning an AI event or community program?" copy="Let’s shape an approachable session for your audience." />
     </>
   );
 }
@@ -667,8 +704,8 @@ function ContactForm({ defaultInquiryType, source }) {
   );
 }
 
-function PageHero({ eyebrow, title, copy, children }) {
-  return <section className="page-hero"><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{copy}</p>{children && <div className="button-row">{children}</div>}</section>;
+function PageHero({ eyebrow, title, copy, children, compact = false }) {
+  return <section className={`page-hero${compact ? ' page-hero-compact' : ''}`}><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{copy}</p>{children && <div className="button-row">{children}</div>}</section>;
 }
 
 function ContactCta({ title, copy }) {
