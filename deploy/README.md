@@ -17,7 +17,7 @@ Both services must use the same full 40-character Git SHA. Do not deploy `latest
 
 ## Host prerequisites
 
-- Docker Compose v2
+- standalone `docker-compose` 2.29.2 on the current host
 - external Docker network `traefik`
 - host-managed environment at `/home/ec2-user/rjchicago/.env` (never synchronized from Git)
 - EC2 role `ec2-s3-snipps-assets` with `rj-ecr-pull`
@@ -31,9 +31,9 @@ Until Phase 4 automation is complete, an authorized operator may deploy manually
 ```bash
 cd /home/ec2-user/rjchicago
 export RJ_IMAGE_TAG=<full-40-character-git-sha>
-docker compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml pull
-docker compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml up -d
-docker compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml ps
+docker-compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml pull
+docker-compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml up -d
+docker-compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml ps
 ```
 
 Verify the API and web health before considering the release successful:
@@ -41,7 +41,7 @@ Verify the API and web health before considering the release successful:
 ```bash
 curl --fail https://rjchicago.com/
 curl --fail https://rjchicago.com/api/config
-docker compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml ps
+docker-compose --project-name rjchicago --env-file .env -f docker-compose.prod.yml ps
 ```
 
 The current legacy deployment uses `web-rj-web-1` and `web-rj-api-1` with Docker Hub `latest` inside `/home/ec2-user/web/docker-compose.yaml`. That file is the master stack and also owns Traefik and unrelated services. Phase 4 performs a one-time, reversible handoff to the dedicated project; routine RJ operations must never run broad `up`, `down`, or prune commands against the master project.
