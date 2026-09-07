@@ -11,4 +11,9 @@ Plans are ORPTA implementation contracts. Read [ORPTA.md](../ORPTA.md) before ex
 - [Phase 3: production topology](RJ_PHASE_3_PRODUCTION_TOPOLOGY.md) — done; dedicated `rjchicago` topology is live and validated
 - [Phase 4: AWS deployment](RJ_PHASE_4_AWS_DEPLOYMENT.md) — in progress, identity bootstrap complete; SSM deployment implementation active
 
+## Feature plans
+
+- [Upcoming AI events](RJ_UPCOMING_EVENTS.md) — done; event data and agenda cards implemented
+- [Dedicated events route](RJ_EVENTS_ROUTE.md) — done; dedicated `/events` route and navigation implemented
+
 Do not treat roadmap prose as permission to implement a later phase. Follow dependencies and acceptance criteria in the active child plan.
