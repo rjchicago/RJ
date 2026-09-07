@@ -23,8 +23,9 @@ done
 aws_cmd=(aws --region "$region"); [[ -n "$profile" ]] && aws_cmd+=(--profile "$profile")
 [[ $("${aws_cmd[@]}" sts get-caller-identity --query Account --output text) == "$account_expected" ]] || die 'AWS account mismatch'
 send() {
-  local command_id status
-  command_id=$("${aws_cmd[@]}" ssm send-command --document-name AWS-RunShellScript --instance-ids "$instance" --parameters "commands=$1" --query Command.CommandId --output text)
+  local command_id parameters status
+  parameters=$(jq -cn --arg command "$1" '{commands:[$command]}')
+  command_id=$("${aws_cmd[@]}" ssm send-command --document-name AWS-RunShellScript --instance-ids "$instance" --parameters "$parameters" --query Command.CommandId --output text)
   "${aws_cmd[@]}" ssm wait command-executed --command-id "$command_id" --instance-id "$instance" || true
   status=$("${aws_cmd[@]}" ssm get-command-invocation --command-id "$command_id" --instance-id "$instance" --query Status --output text)
   [[ "$status" == Success ]] || { printf 'ssm_command_id=%s status=%s\n' "$command_id" "$status" >&2; return 1; }

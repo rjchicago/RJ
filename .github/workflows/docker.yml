@@ -162,7 +162,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Check immutable image tags
+        id: existing
+        run: |
+          web=false
+          api=false
+          aws ecr describe-images --repository-name "$ECR_WEB_REPOSITORY" --image-ids imageTag="${{ github.sha }}" >/dev/null 2>&1 && web=true
+          aws ecr describe-images --repository-name "$ECR_API_REPOSITORY" --image-ids imageTag="${{ github.sha }}" >/dev/null 2>&1 && api=true
+          echo "web=$web" >> "$GITHUB_OUTPUT"
+          echo "api=$api" >> "$GITHUB_OUTPUT"
+
       - name: Publish web image
+        if: steps.existing.outputs.web != 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./apps/web
@@ -177,6 +188,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Publish API image
+        if: steps.existing.outputs.api != 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./apps/api
