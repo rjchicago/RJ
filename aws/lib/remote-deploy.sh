@@ -32,6 +32,7 @@ trap 'on_error' ERR
 trap 'rm -f "$lock"' EXIT
 export RJ_IMAGE_TAG="$sha"
 docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" config --quiet
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 524541702023.dkr.ecr.us-east-1.amazonaws.com >/dev/null
 docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" pull
 docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" up -d
 healthy=0
