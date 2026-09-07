@@ -9,7 +9,7 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: traefik
-      traefik.http.routers.rj-web.rule: Host(`rjchicago.com`)
+      traefik.http.routers.rj-web.rule: Host(`rjchicago.com`) || Host(`www.rjchicago.com`)
       traefik.http.routers.rj-web.entrypoints: websecure
       traefik.http.routers.rj-web.tls: "true"
       traefik.http.routers.rj-web.tls.certresolver: acme
@@ -39,7 +39,7 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: traefik
-      traefik.http.routers.rj-api.rule: Host(`rjchicago.com`) && PathPrefix(`/api`)
+      traefik.http.routers.rj-api.rule: (Host(`rjchicago.com`) || Host(`www.rjchicago.com`)) && PathPrefix(`/api`)
       traefik.http.routers.rj-api.priority: "100"
       traefik.http.routers.rj-api.entrypoints: websecure
       traefik.http.routers.rj-api.tls: "true"

@@ -22,7 +22,7 @@ The production web image serves the SPA through Nginx. The API image serves port
 everything else -> web container
 ```
 
-The Phase 3 production Compose source of truth is [deploy/docker-compose.prod.yml](../deploy/docker-compose.prod.yml). It runs as the dedicated `rjchicago` Compose project from `/home/ec2-user/rjchicago`, routes `/api/*` to `rj-api:3001` and all other paths to `rj-web:80` through the shared Traefik `websecure` entrypoint and `acme` resolver. Traefik remains owned by the legacy master project; routine RJ deployment cannot restart that project or unrelated services.
+The Phase 3 production Compose source of truth is [deploy/docker-compose.prod.yml](../deploy/docker-compose.prod.yml). It runs as the dedicated `rjchicago` Compose project from `/home/ec2-user/rjchicago`, accepts both `rjchicago.com` and `www.rjchicago.com`, routes `/api/*` to `rj-api:3001`, and routes all other paths to `rj-web:80` through the shared Traefik `websecure` entrypoint and `acme` resolver. The apex currently redirects to `www`, so both hostnames must remain in the router rules. Traefik remains owned by the legacy master project; routine RJ deployment cannot restart that project or unrelated services.
 
 ## Repository ownership
 
