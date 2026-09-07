@@ -189,3 +189,8 @@ jobs:
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Deploy release
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: bash aws/deploy-rj.sh --no-profile --tag "$RELEASE_SHA"

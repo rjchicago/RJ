@@ -24,16 +24,16 @@ restore_previous() {
   old_sha=$(sed -n 's/.*"sha":"\([0-9a-f]\{40\}\)".*/\1/p' "$state/current.json")
   [[ "$old_sha" ]] || return 1
   export RJ_IMAGE_TAG="$old_sha"
-  docker compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" up -d
+  docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" up -d
   printf '%s restored_sha=%s result=automatic-restoration\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$old_sha" >> "$state/history.log"
 }
 on_error() { code=$?; restore_previous || true; exit "$code"; }
 trap 'on_error' ERR
 trap 'rm -f "$lock"' EXIT
 export RJ_IMAGE_TAG="$sha"
-docker compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" config --quiet
-docker compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" pull
-docker compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" up -d
+docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" config --quiet
+docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" pull
+docker-compose --project-name rjchicago --env-file "$root/.env" -f "$root/docker-compose.prod.yml" up -d
 healthy=0
 for _ in $(seq 1 30); do
   web_state=$(docker inspect --format '{{.State.Health.Status}}' rjchicago-rj-web-1 2>/dev/null || true)

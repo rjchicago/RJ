@@ -1,6 +1,6 @@
 # Phase 3: production topology and release contract
 
-Status: in-progress
+Status: done
 Parent: [RJ_SITE_FOUNDATION.md](RJ_SITE_FOUNDATION.md)
 Depends on: Phases 0-2
 
@@ -137,7 +137,7 @@ Pass criterion: no placeholders remain and an authorized operator can perform an
 
 ### P3-T4 — Validate topology on production-like infrastructure
 
-Status: pending
+Status: done
 
 Files: no intended changes except recorded evidence and amendments
 
@@ -188,3 +188,4 @@ Pass criterion: all cases are recorded with date and non-secret evidence in this
 - 2026-09-07, P3-T2: added `deploy/docker-compose.prod.yml` as the production topology source of truth. It uses immutable full Git SHA image tags from the RJ ECR repositories, the external `traefik` network, `websecure`/`acme` routing, web and API healthchecks, read-only Nginx runtime filesystems, and no published API port. `deploy/.env.example` is safe and contains no credentials. Compose config validation passed.
 - 2026-09-07, P3-T3: added `deploy/README.md` and updated architecture/configuration/root README guidance with dedicated host path `/home/ec2-user/rjchicago`, Compose project `rjchicago`, operator-owned secret boundaries, health checks, rollback expectations, and explicit prohibition on broad Docker prune operations.
 - 2026-09-07, P3-T4: deferred. Public DNS could not be resolved from this environment, and the live host still runs the legacy Docker Hub `latest` deployment. Full production-like validation belongs with the first SHA-tagged Phase 4 deployment; no live service migration was performed in Phase 3.
+- 2026-09-07, P3-T4 completion: guarded SSM cutover command `c3eb2e17-9026-4938-9cdc-2f7fa0e170cc` deployed paired SHA `0935a18bc826c73e49e42c9fc738a57770e2df36` from ECR into Compose project `rjchicago`. Independent verification found both containers healthy, only internal ports `80/tcp` and `3001/tcp`, both legacy RJ containers stopped, release state present, and public `/` plus `/api/config` successful from the host and external client. Traefik and unrelated master-stack services were not restarted. Phase 3 acceptance is complete.
